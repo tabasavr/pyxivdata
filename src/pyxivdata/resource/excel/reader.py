@@ -65,7 +65,7 @@ class ExdRow:
                  sheet_reader: typing.Optional[SHEET_READER] = None):
         self._row_id = row_id
         self._sub_row_id = sub_row_id
-        self._columns = columns
+        self._columns = sorted(list(columns), key=lambda c: c.offset)
         self._fixed_data = fixed_data
         self._variable_data = variable_data
         self._sheet_reader = sheet_reader
@@ -77,7 +77,7 @@ class ExdRow:
         for k, t in typing.get_type_hints(cls).items():
             k: str
             t: type
-            if k[0] == '_' or k[0].isupper():
+            if k[0] == '_':
                 continue
             cls._mapping[k] = t
             cls._index_to_name_mapping[getattr(cls, k)] = k
@@ -124,13 +124,16 @@ class ExdRow:
             return super().__getattribute__(item)
         col_index = getattr(self.__class__, item)
         v = self.__getitem__(col_index)
-        return col_type(v)
+        return v
 
     def __len__(self):
         return len(self._columns)
 
     def __repr__(self):
-        return f"{self.__class__.__name__}({self.row_id}: {self[0]})"
+        try:
+            return f"{self.__class__.__name__}({self.row_id}: {self.__getattribute__(self._display_field)})"
+        except AttributeError:
+            return f"{self.__class__.__name__}({self.row_id})"
 
 
 if True:

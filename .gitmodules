@@ -1,0 +1,3 @@
+[submodule "codegen/EXDSchema"]
+	path = codegen/EXDSchema
+	url = https://github.com/xivdev/EXDSchema.git
