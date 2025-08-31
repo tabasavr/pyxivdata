@@ -132,6 +132,7 @@ class GameLanguage(enum.IntEnum):
     ChineseSimplified = 5
     ChineseTraditional = 6
     Korean = 7
+    Unknown8 = 8
 
     def __str__(self):
         return f"{self.name}({self.value})"
